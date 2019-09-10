@@ -781,7 +781,36 @@ public class Solution {
         }
         return ans;
     }
+*//*
+    public int uniquePaths(int m, int n) {
+        if (m == 1 || n ==1) {
+            return 1;
+        }
+        if (m == 2) {
+            return n;
+        }
+        if (n == 2) {
+            return m;
+        }
+        return uniquePaths(m-1,n)+uniquePaths(m,n-1);
+    }
 */
+
+    public int minPathSum(int[][] grid) {
+        for (int i = 1; i < grid.length; i++) {
+            grid[i][0] = grid[i-1][0] + grid[i][0];
+        }
+        for (int i = 1; i < grid[0].length; i++) {
+            grid[0][i] = grid[0][i-1] + grid[0][i];
+        }
+        for (int i = 1; i < grid.length; i++) {
+            for (int j = 1; j < grid[0].length; j++) {
+                grid[i][j] = Math.min(grid[i-1][j],grid[i][j-1]) + grid[i][j];
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+
 
 
 
@@ -798,11 +827,11 @@ public class Solution {
 //        test.add("monkey");
 //        test.add("plea");
         int[] test = {1, 3, 2};
-        String[] testfstring = { "tea", "tan", "ate", "nat", "bat"};
-        int[][] test2 = new int[][]{{3,4},{1,3}};
+        String[] testfstring = {"tea", "tan", "ate", "nat", "bat"};
+        int[][] test2 = new int[][]{{1, 2}, {1, 1}};
 //        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
-        System.out.println(s.merge(test2));
+        System.out.println(s.minPathSum(test2));
 //        System.out.println(s.isSubtree(s.stringToTreeNode("[1,null,1,null,1,null,1,2]"),s.stringToTreeNode("[1,null,1,null,1,2]")));
 //        System.out.println(s.isSubtree(s.stringToTreeNode("[1,1]"),s.stringToTreeNode("[1]")));
     }
