@@ -793,7 +793,7 @@ public class Solution {
 //        test.add("monkey");
 //        test.add("plea");
         int[] test = {1, 3, 2};
-        String[] testfstring = {"eat", "tea", "tan", "ate", "nat", "bat"};
+        String[] testfstring = { "tea", "tan", "ate", "nat", "bat"};
         int[][] test2 = new int[][]{{3,4},{1,3}};
 //        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
