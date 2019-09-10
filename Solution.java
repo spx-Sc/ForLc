@@ -794,6 +794,7 @@ public class Solution {
 //        test.add("plea");
         int[] test = {1, 3, 2};
         String[] testfstring = { "tea", "tan", "ate", "nat", "bat"};
+        ininini
         int[][] test2 = new int[][]{{3,4},{1,3}};
 //        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
