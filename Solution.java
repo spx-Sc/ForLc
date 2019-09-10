@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Solution {
     /*easy functions*/
-    public static String integerArrayToString(int[] nums, int length) {
+    private static String integerArrayToString(int[] nums, int length) {
         if (length == 0) {
             return "[]";
         }
@@ -14,7 +14,7 @@ public class Solution {
         String result = "";
         for (int index = 0; index < length; index++) {
             int number = nums[index];
-            result += Integer.toString(number) + ", ";
+            result = result + Integer.toString(number) + ", ";
         }
         return "[" + result.substring(0, result.length() - 2) + "]";
     }
@@ -750,35 +750,40 @@ public class Solution {
     }
 */
 
+
+/*
     //  <-(・ω・!</)= = = = = =
     public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals, (i1, i2) -> Integer.compare(i1[0], i2[0]));
-        List<int[]> ans = new ArrayList<>();
-//        List<Integer> beg = new ArrayList<>();
-//        List<Integer> end = new ArrayList<>();
-//        for (int i = 0; i < n; i++) {
-//            beg.add(intervals[i][0]);
-//            end.add(intervals[i][1]);
-//        }
-        int index = 0;
-//        int numOfDel = 0;
-        while(index<intervals.length){
-            int endIndex = index;
-            int maxfar = intervals[index][1];
-            while (endIndex + 1 < intervals.length && intervals[index][1] >= intervals[endIndex + 1][0]) {
-                endIndex++;
-                maxfar = Math.max(maxfar,intervals[endIndex ][1]);
+        if (intervals.length == 0) {
+            return intervals;
+        }
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0]-o2[0];
             }
-            //merge
-            ans.add(new int[]{intervals[index][0],maxfar});
-            index = endIndex +1;
+        });
+        List<int[]> preans = new ArrayList<>();
+        int[] newrange = intervals[0];
+        preans.add(newrange);
+        for (int[] now : intervals) {
+            if (now[0] <= newrange[1]) {
+                newrange[1] = Math.max(newrange[1],now[1]);
+            }else {
+                newrange = now;
+                preans.add(newrange);
+            }
         }
-        int[][] aans = new int[ans.size()][];
-        for (int i = 0; i < ans.size(); i++) {
-            aans[i] = ans.get(i);
+        int[][] ans = new int[preans.size()][];
+        int index = 0;
+        for (int[] now : preans) {
+            ans[index++] = now;
         }
-        return aans;
+        return ans;
     }
+*/
+
+
 
     public static void main(String[] args) {
         Solution s = new Solution();
@@ -794,7 +799,6 @@ public class Solution {
 //        test.add("plea");
         int[] test = {1, 3, 2};
         String[] testfstring = { "tea", "tan", "ate", "nat", "bat"};
-        ininini
         int[][] test2 = new int[][]{{3,4},{1,3}};
 //        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
