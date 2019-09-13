@@ -6,6 +6,60 @@ import java.util.*;
 
 public class Solution {
     /*easy functions*/
+    private void swap(int a, int b, int[][] ma) {
+        int temp = ma[a][b];
+        ma[a][b] = ma[b][a];
+        ma[b][a] = temp;
+    }
+
+    private void swap(int a, int b, int[] ma) {
+        int temp = ma[b];
+        ma[b] = ma[a];
+        ma[a] = temp;
+    }
+    public static int[] stringToIntegerArray(String input) {
+        input = input.trim();
+        input = input.substring(1, input.length() - 1);
+        if (input.length() == 0) {
+            return new int[0];
+        }
+
+        String[] parts = input.split(",");
+        int[] output = new int[parts.length];
+        for(int index = 0; index < parts.length; index++) {
+            String part = parts[index].trim();
+            output[index] = Integer.parseInt(part);
+        }
+        return output;
+    }
+
+    public static ListNode stringToListNode(String input) {
+        // Generate array from the input
+        int[] nodeValues = stringToIntegerArray(input);
+
+        // Now convert that list into linked list
+        ListNode dummyRoot = new ListNode(0);
+        ListNode ptr = dummyRoot;
+        for(int item : nodeValues) {
+            ptr.next = new ListNode(item);
+            ptr = ptr.next;
+        }
+        return dummyRoot.next;
+    }
+
+    public static String listNodeToString(ListNode node) {
+        if (node == null) {
+            return "[]";
+        }
+
+        String result = "";
+        while (node != null) {
+            result += Integer.toString(node.val) + ", ";
+            node = node.next;
+        }
+        return "[" + result.substring(0, result.length() - 2) + "]";
+    }
+
     private static String integerArrayToString(int[] nums, int length) {
         if (length == 0) {
             return "[]";
@@ -709,11 +763,7 @@ public class Solution {
         }
     }
 
-    private void swap(int a, int b,int[][] ma) {
-        int temp = ma[a][b];
-        ma[a][b] = ma[b][a];
-        ma[b][a] = temp;
-    }
+
 */
 /*
     public List<List<String>> groupAnagrams(String[] strs) {
@@ -812,8 +862,7 @@ public class Solution {
         }
         return grid[grid.length-1][grid[0].length-1];
     }
-*/
-
+*//*
     public void setZeroes(int[][] matrix) {
         //record the positions of zeros
         List<Integer> row = new ArrayList<>();
@@ -837,12 +886,249 @@ public class Solution {
                 matrix[j][i] = 0;
             }
         }
+    }
+    */
+
+/*
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0 || (matrix.length == 1 && matrix[0].length == 0)) {
+            return false;
+        }
+        int low;
+        int high;
+        for (low = 0, high = matrix.length - 1; low <= high;)
+        {
+            int middle = (low + high) / 2;
+            if (matrix[middle][0] < target)
+            {
+                low = middle + 1;
+            }
+            else if (matrix[middle][0] > target)
+            {
+                high = middle - 1;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
 
+        // when above loop ends, search in row[high]
+        int row = high;
+        if (row >= 0)
+        {
+            for (low = 0, high = matrix[row].length - 1; low <= high;)
+            {
+                int middle = (low + high) / 2;
+                if (matrix[row][middle] < target)
+                {
+                    low = middle + 1;
+                }
+                else if (matrix[row][middle] > target)
+                {
+                    high = middle - 1;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
 
+        return false;
+    }
+*/
+/*
+    public void sortColors(int A[]) {
+        int second=A.length-1, zero=0;
+        for (int i=0; i<=second; i++) {
+            while (A[i]==2 && i<second)//如果在2区之外发现了2，就吧它传送到2区的边缘上，并且扩大2区，不断循环，保证i处要不然进入红区，要不然不是2；
+                swap(A,i, second--);
+            while (A[i]==0 && i>zero)//如果在0区之外。。。。。。。（因为zero小于i，之前的算法保证了i之前的🈚2，那么不是0就是1了，吧发现的0换过去，如果换到了1，就重复这个过程找找有没有1了到底t）
+        swap(A,i, zero++);
+    }
+}
+
+    private void swap(int[] A, int i, int i1) {
+        int temp = A[i];
+        A[i] = A[i1];
+        A[i1] = temp;
+    }
+*/
+
+/*
+    public List<List<Integer>> combine(int n, int k) {
+            List<List<Integer>> ans = new ArrayList<>();
+            List<Integer> now = new ArrayList<>();
+            helper(n, k, ans, now, 0);
+        return ans;
+    }
+
+    private void helper(int n, int k, List<List<Integer>> ans, List<Integer> now, int top) {
+        if (k == 0) {
+            ans.add(new ArrayList(now));
+            return;
+        }
+        for (int i = top + 1; i <= n - k + 1; i++) {
+            now.add(i);
+            helper(n,k-1,ans,now,i);
+            now.remove(now.size()-1);
+        }
+    }
+*/
+/*
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i <= nums.length; i++) {
+            List<List<Integer>> temp = combine(nums.length,i);
+            for (List<Integer> now : temp) {
+                List<Integer> anspart = new ArrayList<>();
+                for (int index : now) {
+                    anspart.add(nums[index-1]);
+                }
+                ans.add(anspart);
+            }
+        }
+        return ans;
+
+    }
+*/
+
+
+    //TODO: Finish 79
+
+/*
+    public int removeDuplicates(int[] nums) {
+        int count = 1;
+        int pos = 0;
+        int detect = 0;
+        while (detect < nums.length) {
+            count = (pos != 0 && nums[pos-1] == nums[detect]) ? count+1 : 1;
+            if (count < 3) {
+                swap(pos, detect, nums);
+                detect++;
+                pos++;
+            } else {
+                detect++;
+            }
+        }
+        return pos ;
+    }
+*/
+
+/*
+    public ListNode deleteDuplicates(ListNode head) {
+        //find a good start
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode ans = null;
+        int rep = 9994899;
+        if (head.val != head.next.val) {
+            ans = head;
+        }else {
+            rep = head.val;
+            ListNode sel = head;
+            while(sel.next!=null &&(rep==sel.val||sel.val==sel.next.val)){
+                if (sel.val == sel.next.val) {
+                    rep = sel.val;
+                }
+                sel = sel.next;
+            }
+            if (sel.val == rep ) {
+                return null;
+            }else
+                ans = sel;
+        }
+
+        //seek for nonreps
+        ListNode p = ans.next;
+        ListNode build =  ans;
+        while (p != null) {
+            if (p.next == null) {
+                if(p.val!=rep){
+                    build.next = p;
+                    return ans;
+                }
+                if (build != null) {
+                    build.next = null;
+                }
+                return ans;
+            }
+            if (p.val == p.next.val || p.val == rep) {
+                rep = p.val;
+                p = p.next;
+                continue;
+            }
+            build.next = p;
+            p = p.next;
+            build = build.next;
+        }
+        if (build != null) {
+            build.next = null;
+        }
+        return ans;
+    }
+*/
+
+
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> now = new ArrayList<>();
+        helper(n, k, ans, now, 0);
+        return ans;
+    }
+
+    private void helper(int n, int k, List<List<Integer>> ans, List<Integer> now, int top) {
+        if (k == 0) {
+            ans.add(new ArrayList(now));
+            return;
+        }
+        for (int i = top + 1; i <= n - k + 1; i++) {
+            now.add(i);
+            helper(n,k-1,ans,now,i);
+            now.remove(now.size()-1);
+        }
     }
 
 
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i <= nums.length; i++) {
+            List<List<Integer>> temp = combine(nums.length,i);
+            for (List<Integer> now : temp) {
+                List<Integer> anspart = new ArrayList<>();
+                for (int index : now) {
+                    anspart.add(nums[index-1]);
+                }
+                ans.add(anspart);
+            }
+        }
+
+        //remove the same
+        if (ans.size() == 0 || ans.size() == 1) {
+            return ans;
+        }
+        List<Integer> bf = new ArrayList(ans.get(0));
+        List<Integer> rm = new ArrayList<>();
+        for (int i = 1; i < ans.size(); i++) {
+            List<Integer> af = ans.get(i);
+            if (bf.size() == af.size()) {
+                if (af.containsAll(bf)) {
+                    rm.add(i);
+                }
+            }
+            bf = af;
+        }
+        for (int i = rm.size() - 1; i >= 0; i--) {
+            int j = rm.get(i);
+            ans.remove(j);
+        }
+        return ans;
+
+    }
 
     public static void main(String[] args) {
         Solution s = new Solution();
@@ -856,12 +1142,13 @@ public class Solution {
 //        test.add("apple");
 //        test.add("monkey");
 //        test.add("plea");
-        int[] test = {1, 3, 2};
+        int[] test = {1,2,2};
+        int[] test3 = {5,6,7,10};
         String[] testfstring = {"tea", "tan", "ate", "nat", "bat"};
-        int[][] test2 = new int[][]{{1, 2}, {1, 1}};
-//        TreeNode test = s.stringToTreeNode("[]");
+        int[][] test2 = new int[][]{{1}};//        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
-        System.out.println(s.minPathSum(test2));
+
+        System.out.println(s.subsetsWithDup(test));
 //        System.out.println(s.isSubtree(s.stringToTreeNode("[1,null,1,null,1,null,1,2]"),s.stringToTreeNode("[1,null,1,null,1,2]")));
 //        System.out.println(s.isSubtree(s.stringToTreeNode("[1,1]"),s.stringToTreeNode("[1]")));
     }
