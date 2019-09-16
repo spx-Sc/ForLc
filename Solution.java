@@ -1,7 +1,9 @@
 
+import com.sun.source.tree.LiteralTree;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import javax.swing.tree.TreeNode;
 import java.util.*;
 
 public class Solution {
@@ -17,6 +19,78 @@ public class Solution {
         ma[b] = ma[a];
         ma[a] = temp;
     }
+
+    public static List<List<Integer>> stringto2dList(String input) {
+        input = input.substring(1, input.length() - 1);
+        List<List<Integer>> ans = new LinkedList<>();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '[') {
+                continue;
+            }
+            List<Integer> now = new ArrayList<>();
+            while (input.charAt(i) != ',') {
+                now.add(input.charAt(i) - '0');
+                i += 2;
+                if (i > input.length() - 1) {
+                    break;
+                }
+            }
+            i++;
+            ans.add(now);
+        }
+        return ans;
+    }
+
+    public TreeNode string2TreeNode(String input) {
+        input = input.trim();
+        input = input.substring(1, input.length() - 1);
+        if (input.length() == 0) {
+            return null;
+        }
+
+        String[] parts = input.split(",");
+        String item = parts[0];
+        TreeNode root = new TreeNode(Integer.parseInt(item));
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+
+        int index = 1;
+        while (!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int leftNumber = Integer.parseInt(item);
+                node.left = new TreeNode(leftNumber);
+                nodeQueue.add(node.left);
+            }
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int rightNumber = Integer.parseInt(item);
+                node.right = new TreeNode(rightNumber);
+                nodeQueue.add(node.right);
+            }
+        }
+        return root;
+    }
+
+
+    public static String booleanToString(boolean input) {
+        return input ? "True" : "False";
+    }
+
+
     public static int[] stringToIntegerArray(String input) {
         input = input.trim();
         input = input.substring(1, input.length() - 1);
@@ -26,12 +100,13 @@ public class Solution {
 
         String[] parts = input.split(",");
         int[] output = new int[parts.length];
-        for(int index = 0; index < parts.length; index++) {
+        for (int index = 0; index < parts.length; index++) {
             String part = parts[index].trim();
             output[index] = Integer.parseInt(part);
         }
         return output;
     }
+
 
     public static ListNode stringToListNode(String input) {
         // Generate array from the input
@@ -40,7 +115,7 @@ public class Solution {
         // Now convert that list into linked list
         ListNode dummyRoot = new ListNode(0);
         ListNode ptr = dummyRoot;
-        for(int item : nodeValues) {
+        for (int item : nodeValues) {
             ptr.next = new ListNode(item);
             ptr = ptr.next;
         }
@@ -121,8 +196,9 @@ public class Solution {
         return root;
     }
 
+
     /* The defination of all data structure*/
-    private class TreeNode {
+    private static class TreeNode {
         TreeNode left;
         TreeNode right;
         int val;
@@ -136,9 +212,11 @@ public class Solution {
             left = a;
             right = b;
         }
-
-
     }
+
+
+
+
 
 
     /* The end of defination*/
@@ -997,6 +1075,7 @@ public class Solution {
 
 
     //TODO: Finish 79
+    //Todo: 127
 
 /*
     public int removeDuplicates(int[] nums) {
@@ -1074,82 +1153,838 @@ public class Solution {
 */
 
 
-    public List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> ans = new ArrayList<>();
-        List<Integer> now = new ArrayList<>();
-        helper(n, k, ans, now, 0);
+//    public List<List<Integer>> combine(int n, int k) {
+//        List<List<Integer>> ans = new ArrayList<>();
+//        List<Integer> now = new ArrayList<>();
+//        helper(n, k, ans, now, 0);
+//        return ans;
+//    }
+//
+//    private void helper(int n, int k, List<List<Integer>> ans, List<Integer> now, int top) {
+//        if (k == 0) {
+//            ans.add(new ArrayList(now));
+//            return;
+//        }
+//        for (int i = top + 1; i <= n - k + 1; i++) {
+//            now.add(i);
+//            helper(n,k-1,ans,now,i);
+//            now.remove(now.size()-1);
+//        }
+//    }
+
+//
+//    public List<List<Integer>> subsetsWithDup(int[] nums) {
+//        List<List<Integer>> ans = new ArrayList<>();
+//        for (int i = 0; i <= nums.length; i++) {
+//            List<List<Integer>> temp = combine(nums.length,i);
+//            for (List<Integer> now : temp) {
+//                List<Integer> anspart = new ArrayList<>();
+//                for (int index : now) {
+//                    anspart.add(nums[index-1]);
+//                }
+//                ans.add(anspart);
+//            }
+//        }
+//
+//        //remove the same
+//        if (ans.size() == 0 || ans.size() == 1) {
+//            return ans;
+//        }
+//        List<Integer> bf = new ArrayList(ans.get(0));
+//        List<Integer> rm = new ArrayList<>();
+//        hoop : for (int i = 1; i < ans.size(); i++) {
+//            List<Integer> af = ans.get(i);
+//            if (bf.size() == af.size()) {
+//
+//                for(int j=0;j<af.size();j++){
+//                    if(!af.get(j).equals(bf.get(j))){
+//                        continue hoop;
+//                    }
+//                }
+//                rm.add(i);
+//
+//
+//            }
+//            bf = af;
+//        }
+//        for (int i = rm.size() - 1; i >= 0; i--) {
+//            int j = rm.get(i);
+//            ans.remove(j);
+//        }
+//        return ans;
+//
+//    }
+
+
+//    public List<List<Integer>> subsetsWithDup(int[] nums) {
+//        Arrays.sort(nums);
+//        List<List<Integer>> res = new ArrayList<>();
+//        List<Integer> each = new ArrayList<>();
+//        helper(res, each, 0, nums);
+//        return res;
+//    }
+//
+////    private void dfs(int[] nums, int i, ArrayList<Integer> now, List<List<Integer>> result) {
+////        if (i == nums.length) {
+////            result.add(now);
+////            return;
+////        }
+////        for (int j = i; j <= nums.length - 1; ) {
+////            now.add(nums[j]);
+////            dfs(nums,j+1,now,result);
+////            now.remove(now.size()-1);
+////            j++;
+////            while(j<nums.length-1&&nums[j]==nums[j+1]){
+////                j++;
+////            }
+////        }
+////    }
+//public void helper(List<List<Integer>> res, List<Integer> each, int pos, int[] n) {
+//    if (pos <= n.length) {
+//        res.add(new ArrayList<>(each));
+//    }
+//    int i = pos;
+//    while (i < n.length) {
+//        each.add(n[i]);
+//        helper(res, each, i + 1, n);
+//        each.remove(each.size() - 1);
+//        i++;
+//        while (i < n.length && n[i] == n[i - 1]) {i++;}
+//    }
+//    return;
+//}
+
+/*
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        Stack<ListNode> stack = new Stack<>();
+        ListNode pre = head;
+        ListNode oldhead,oldtail;
+
+        for (int i = 1; i < m - 1; i++) {
+            pre = pre.next;
+        }
+        if (m == 1) {
+            oldhead = null;
+        }else {
+            oldhead = pre;
+            pre = pre.next;
+        }
+
+
+        for (int i = m; pre!=null&&i <= n; i++) {
+            stack.push(pre);
+            pre = pre.next;
+        }
+        oldtail = pre;
+        int lin = stack.size();
+        ListNode for1 = null;
+        if (m == 1) {
+            oldhead = stack.pop();
+            for1 = oldhead;
+        }
+
+        for (int i = 0;oldhead!=null&& !stack.isEmpty(); i++) {
+            oldhead.next = stack.pop();
+            oldhead = oldhead.next;
+        }
+        oldhead.next = oldtail;
+        if (m == 1) {
+            return for1;
+        }
+        return head;
+    }
+*//*
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        helper(root,ans);
         return ans;
     }
 
-    private void helper(int n, int k, List<List<Integer>> ans, List<Integer> now, int top) {
-        if (k == 0) {
+    private void helper(TreeNode root, List<Integer> ans) {
+        if (root == null) {
+            return;
+        }
+        helper(root.left,ans);
+        ans.add(root.val);
+        helper(root.right,ans);
+    }
+    */
+/*
+    public List<TreeNode> generateTrees(int n) {
+        return helper(1, n);
+    }
+
+    private List<TreeNode> helper(int i, int n) {
+        if(n == 0)
+            return new ArrayList<>();
+        List<TreeNode> ans = new ArrayList<TreeNode>();
+        if (i > n) {
+            ans.add(null);
+        } else {
+            for (int j = i; j <= n; j++) {
+                List<TreeNode> ll = helper(i, j - 1);
+                List<TreeNode> rr = helper(j + 1, n);
+                for (TreeNode l : ll) {
+                    for (TreeNode r : rr) {
+                        TreeNode t = new TreeNode(j);
+                        t.left = l;
+                        t.right = r;
+                        ans.add(t);
+                    }
+                }
+
+            }
+        }
+        return ans;
+    }
+*/
+
+/*
+    public int numTrees(int n) {
+        if (n == 0 || n==1) {
+            return 1;
+        }
+        if (n == 2) {
+            return 2;
+        }
+        if (n == 3) {
+            return 4;
+        }
+        int ans = 0;
+        for (int i = 0; i <= n - 1; i++) {
+            ans = ans + numTrees(i) * numTrees(n - 1 - i);
+        }
+        return ans;
+    }
+*/
+
+/*
+    public boolean isValidBST(TreeNode root) {
+
+        if (root == null) {
+            return true;
+        }
+        return helper(root.left,56625,root.val)&&helper(root.right,root.val,56625);
+
+    }
+
+    private boolean helper(TreeNode root, int min, int max) {
+        boolean ans = true;
+        if (root == null) {
+            return true;
+        }
+        if (min != 56625) {
+            ans = ans && min<root.val;
+        }
+        if (max != 56625) {
+            ans = ans && root.val < max;
+        }
+        if (root.right != null) {
+            ans = ans && helper(root.right,root.val,max);
+        }
+        if (root.left != null) {
+            ans = ans && helper(root.left,min,root.val);
+        }
+        return ans;
+    }
+*/
+
+
+/*
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) {
+            return ans;
+        }
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            int sizeOfLevel = q.size();
+            List<Integer> now = new ArrayList<>();
+            for (int i = 0; i < sizeOfLevel; i++) {
+                TreeNode t = q.poll();
+                now.add(t.val);
+                if (t.left != null) {
+                    q.add(t.left);
+                }
+                if (t.right != null) {
+                    q.add(t.right);
+                }
+            }
+            ans.add(now);
+        }
+
+        for (int i = 0; i < ans.size(); i++) {
+            if(i%2==0)
+        }
+        return ans;
+    }
+    */
+/*
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) {
+            return ans;
+        }
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            int sizeOfLevel = q.size();
+            List<Integer> now = new ArrayList<>();
+            for (int i = 0; i < sizeOfLevel; i++) {
+                TreeNode t = q.poll();
+                now.add(t.val);
+                if (t.left != null) {
+                    q.add(t.left);
+                }
+                if (t.right != null) {
+                    q.add(t.right);
+                }
+            }
+            ans.add(now);
+        }
+
+        for (int i = 0; i < ans.size(); i++) {
+            if (i % 2 == 1) {
+                Collections.reverse(ans.get(i));
+            }
+        }
+        return ans;
+    }
+*/
+
+/*
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length == 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[0]);
+        int indexOfroot = 0;
+        while (inorder[indexOfroot] != preorder[0]) {
+            indexOfroot++;
+        }
+        root.left = buildTree(Arrays.copyOfRange(preorder,1,1+indexOfroot),Arrays.copyOfRange(inorder,0,indexOfroot));
+        root.right = buildTree(Arrays.copyOfRange(preorder,1+indexOfroot, preorder.length),Arrays.copyOfRange(inorder,indexOfroot+1,inorder.length));
+        return root;
+
+    }
+*/
+
+/*
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i],i);
+        }
+        return helper(inorder,postorder,0,inorder.length-1,0,inorder.length-1,map);
+
+    }
+
+    private TreeNode helper(int[] inorder, int[] postorder, int beg1, int end1,int beg2, int end2,HashMap<Integer,Integer> map) {
+        if (end1>postorder.length-1 || beg1 < 0|| end1<beg1) {
+            return null;
+        }
+        if (end1 == beg1) {
+            return new TreeNode(inorder[end1]);
+        }
+        TreeNode root = new TreeNode(postorder[end2]);
+        int indexOfRoot = map.get(postorder[end2]);
+        root.left = helper(inorder,postorder,beg1,indexOfRoot-1,beg2,beg2+indexOfRoot-beg1-1,map);
+        root.right = helper(inorder,postorder,indexOfRoot + 1,end1,beg2+indexOfRoot-beg1,end2-1,map);
+        return root;
+    }
+*/
+/*
+    public TreeNode sortedListToBST(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode sen = new ListNode(999);
+        sen.next = head;
+        if (head == null) {
+            return null;
+        }
+        if (fast.next == null) {
+            return new TreeNode(fast.val);
+        }
+        if (fast.next.next == null) {
+            TreeNode root = new TreeNode(fast.next.val);
+            root.left = new TreeNode(fast.val);
+            return root;
+        }
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            sen = sen.next;
+        }
+        sen.next = null;
+        TreeNode root = new TreeNode(slow.val);
+        root.left = sortedListToBST(head);
+        root.right = sortedListToBST(slow.next);
+        return root;
+    }
+*/
+
+/*
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> now = new ArrayList<>();
+        if (root == null) {
+            return ans;
+        }
+        helper(ans,root, sum,now);
+        return ans;
+    }
+
+    private void helper(List<List<Integer>> ans, TreeNode root, int sum,List<Integer> now) {
+        now.add(root.val);
+        if (root.left == null && root.right == null) {
+            if (sum == root.val) {
+                ans.add(new ArrayList(now));
+            }
+            now.remove(now.size()-1);
+            return;
+        }
+        if (root.left != null) {
+            helper(ans,root.left, sum - root.val,now);
+        }
+        if (root.right != null) {
+            helper(ans,root.right, sum - root.val,now);
+        }
+        now.remove(now.size()-1);
+        return;
+    }
+*/
+/* easider
+    private TreeNode prev = null;
+
+    public void flatten(TreeNode root) {
+        if (root == null)
+            return;
+        flatten(root.right);
+        flatten(root.left);
+        root.right = prev;
+        root.left = null;
+        prev = root;
+    }
+
+    public void flatten(TreeNode root) {
+        if(root==null || (root.left==null&&root.right==null)){
+            return;
+        }
+        helper(root);
+        return;
+    }
+
+    private TreeNode helper(TreeNode root) {
+        boolean noFkleaf = true;
+        if((root.left==null&&root.right==null))
+            return root;
+        if (root.right != null) {
+            noFkleaf = noFkleaf && (root.right.right!=null||root.right.left!=null);
+        }
+        if (root.left != null) {
+            noFkleaf = noFkleaf && (root.left.right!=null||root.left.left!=null);
+        }
+        if(noFkleaf){
+            if (root.left == null) {
+                return helper(root.right);
+            }
+            if (root.right == null) {
+                root.right = root.left;
+                root.left = null;
+                return helper(root.right);
+            }
+            TreeNode zancun = helper(root.right);
+            helper(root.left).right = root.right;
+            root.right =root.left;
+            root.left = null;
+            return zancun;
+        }else {
+            if (root.right == null) {
+                root.right = root.left;
+                root.left = null;
+                return root.right;
+            }else {
+                if (root.left != null) {
+                    TreeNode za = helper(root.right);
+                    helper(root.left).right = root.right;
+                    root.right = root.left;
+                    root.left = null;
+                    return za;
+                }else {
+                    return helper(root.right);
+                }
+            }
+        }
+    }
+
+ */
+
+/*
+    public Node connect(Node root) {
+        Queue<Node> q = new LinkedList<>();
+        if (root == null) {
+            return null;
+        }
+        q.add(root);
+        while (!q.isEmpty()) {
+            int iengthOfLevel = q.size();
+            Node pre = null;
+            Node af = q.poll();
+
+            for (int i = 0; i < iengthOfLevel-1; i++) {
+                if (af.left != null) {
+                    q.add(af.left);
+                }
+                if (af.right != null) {
+                    q.add(af.right);
+                }
+                pre = q.poll();
+                af.next = pre;
+                af = pre;
+            }
+            if (af.left != null) {
+                q.add(af.left);
+            }
+            if (af.right != null) {
+                q.add(af.right);
+            }
+
+        }
+        return root;
+    }
+*/
+/*
+    public int minimumTotal(List<List<Integer>> triangle) {
+        List<List<Integer>> stst = new ArrayList<>();
+        if (triangle.size() == 0) {
+            return 0;
+        }
+        if (triangle.size() == 1) {
+            return triangle.get(0).get(0);
+        }
+        stst.add(triangle.get(0));
+        for (int i = 1; i < triangle.size(); i++) {
+            helper(stst,stst.get(i-1),triangle.get(i));
+        }
+        Integer minnow = null;
+        for (int now : stst.get(stst.size() - 1)) {
+            if (minnow == null) {
+                minnow = now;
+            }else {
+                minnow = (minnow>now)? now:minnow;
+            }
+        }
+        return minnow;
+    }
+
+    private void helper(List<List<Integer>> stst, List<Integer> integers,List<Integer> integersnow) {
+        List<Integer> now = new ArrayList<>();
+        for (int i = 0; i < integersnow.size(); i++) {
+            if (i == 0) {
+                now.add(integers.get(i) + integersnow.get(i));
+                continue;
+            }
+            if (i == integersnow.size()-1) {
+                now.add(integers.get(i-1) + integersnow.get(i));
+                continue;
+            }
+            now.add(Math.min(integers.get(i-1),integers.get(i)) + integersnow.get(i));
+        }
+        stst.add(now);
+    }
+*/
+
+/*
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        Set<String> beginSet = new HashSet<String>(), endSet = new HashSet<String>();
+
+        int len = 1;
+        int strLen = beginWord.length();
+        HashSet<String> visited = new HashSet<String>();
+
+        beginSet.add(beginWord);
+        endSet.add(endWord);
+        while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+            if (beginSet.size() > endSet.size()) {  // if begin is longer than end, swap their containing
+                Set<String> set = beginSet;
+                beginSet = endSet;
+                endSet = set;
+            }
+            Set<String> temp = new HashSet<String>();
+            for (String word : beginSet) {
+                char[] chs = word.toCharArray();
+
+                for (int i = 0; i < chs.length; i++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        char old = chs[i];
+                        chs[i] = c;
+                        String target = String.valueOf(chs);
+
+                        if (endSet.contains(target)) {
+                            return len + 1;
+                        }
+
+                        if (!visited.contains(target) && wordList.contains(target)) {
+                            temp.add(target);
+                            visited.add(target);
+                        }
+                        chs[i] = old;
+                    }
+                }
+            }
+
+            beginSet = temp;
+            len++;
+        }
+        return 0;
+    }
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        int numofsame = 0;
+        for (String now : wordList) {
+            if (issame(now, endWord)) {
+                numofsame++;
+            }
+        }
+        if (numofsame != 1) {
+            return 0;
+        }
+        Boolean[] used = new Boolean[wordList.size()];
+        Arrays.fill(used,false);
+        int fakeans = helper(beginWord,endWord,wordList,1,used);
+        return fakeans==9999?0:fakeans;
+    }
+
+    private int helper(String beginWord, String endWord, List<String> wordList, int length, Boolean[] used) {
+        int ans = 9999;
+        for (int i = 0; i < wordList.size(); i++) {
+            if(used[i])
+                continue;
+            String now = wordList.get(i);
+
+            if (neig(beginWord, now)) {
+                if (issame(endWord,now)) {
+                    return length+1;
+                }
+                used[i]=true;
+                ans = Math.min(ans,helper(now,endWord,wordList,length+1,used));
+                used[i]=false;
+            }
+        }
+        return ans;
+    }
+
+    private boolean neig(String beginWord, String now) {
+        int numOfDiff = 0;
+        for (int i = 0; i < now.length(); i++) {
+            if (beginWord.charAt(i) != now.charAt(i)) {
+                numOfDiff++;
+            }
+        }
+        return numOfDiff==1;
+    }
+
+    private boolean issame(String beginWord, String now) {
+        int numOfDiff = 0;
+        for (int i = 0; i < now.length(); i++) {
+            if (beginWord.charAt(i) != now.charAt(i)) {
+                numOfDiff++;
+            }
+        }
+        return numOfDiff==0;
+    }
+*/
+
+
+
+/*  fuck fake question, I will continue
+
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        if (s.length() == 0) {
+            return ans;
+        }
+        if (s.length() == 1) {
+            List<String> li = new ArrayList<>();
+            li.add(s);
+            ans.add(li);
+            return ans;
+        }
+        List<List<Integer>> z = new ArrayList<>(12);
+        List<Integer> now = new ArrayList<>();
+        z.add(now);//takes the 0 pos
+        //find1s
+        now = new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            now.add(i);
+        }
+        z.add(1,now);
+        //find2s
+        now = new ArrayList<>();
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == s.charAt(i + 1)) {
+                now.add(i);
+            }
+        }
+        z.add(2,now);
+
+        //find all odd para
+        for (int i = 1; 2 * i + 1 <= s.length(); i++) {
+            now = new ArrayList<>();
+            List<Integer> cores = z.get(2 * (i - 1) + 1);
+            for (int core : cores) {
+                if (core + i > s.length() - 1 || core - i < 0) {
+                    continue;
+                }
+                if (s.charAt(core + i) == s.charAt(core - i)) {
+                    now.add(core);
+                }
+            }
+            if (now.size() == 0) {
+                break;
+            }
+            z.add(2 * i + 1,now);
+        }
+
+
+        //find all even para
+        for (int i = 1; 2 + 2 * i <= s.length(); i++) {
+            now = new ArrayList<>();
+            List<Integer> cores = z.get(2 * (i - 1) + 2);
+            for (int core : cores) {
+                if (core + i + 1 > s.length() - 1 || core - i < 0) {
+                    continue;
+                }
+                if (s.charAt(core + i + 1) == s.charAt(core - i)) {
+                    now.add(core);
+                }
+            }
+            if (now.size() == 0) {
+                break;
+            }
+            if(z.size()<2 + 2 * i)
+                z.add(new ArrayList<>());
+            z.add(2 + 2 * i ,now);
+        }
+
+
+        for (int i = 0; i < z.size(); i++) {
+            List<String> g = new ArrayList<>();
+            List<Integer> cores = z.get(i);
+            for (int core : cores) {
+                if (i % 2 == 1) {
+                    int j = i - 1;
+                    g.add(s.substring(core-j,core + j +1));
+                }else {
+                    int j = i/2 - 1;
+                    g.add(s.substring(core-j,core + j +2));
+                }
+            }
+            ans.add(g);
+        }
+        return ans;
+    }
+*/
+
+/*
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        ArrayList<String> now = new ArrayList<>();
+        helper(s,ans,now,0,s.length()-1);
+        return ans;
+    }
+
+    private void helper(String s, List<List<String>> ans, ArrayList<String> now, int beg, int end) {
+        if (beg > end) {
             ans.add(new ArrayList(now));
             return;
         }
-        for (int i = top + 1; i <= n - k + 1; i++) {
-            now.add(i);
-            helper(n,k-1,ans,now,i);
-            now.remove(now.size()-1);
+        for (int i = 1; beg+i - 1 <= end; i++) {
+            String pro = s.substring(beg,beg+i);
+            if(isPal(pro)){
+                now.add(pro);
+                helper(s,ans,now,beg + i,end);
+                now.remove(now.size()-1);
+            }
         }
     }
 
-
-    public List<List<Integer>> subsetsWithDup(int[] nums) {
-        List<List<Integer>> ans = new ArrayList<>();
-        for (int i = 0; i <= nums.length; i++) {
-            List<List<Integer>> temp = combine(nums.length,i);
-            for (List<Integer> now : temp) {
-                List<Integer> anspart = new ArrayList<>();
-                for (int index : now) {
-                    anspart.add(nums[index-1]);
-                }
-                ans.add(anspart);
+    private boolean isPal(String substring) {
+        for (int i = 0; 2 * i <= substring.length(); i++) {
+            if(substring.charAt(i)!=substring.charAt(substring.length()-1-i)){
+                return false;
             }
         }
-
-        //remove the same
-        if (ans.size() == 0 || ans.size() == 1) {
-            return ans;
-        }
-        List<Integer> bf = new ArrayList(ans.get(0));
-        List<Integer> rm = new ArrayList<>();
-        for (int i = 1; i < ans.size(); i++) {
-            List<Integer> af = ans.get(i);
-            if (bf.size() == af.size()) {
-                if (af.containsAll(bf)) {
-                    rm.add(i);
-                }
-            }
-            bf = af;
-        }
-        for (int i = rm.size() - 1; i >= 0; i--) {
-            int j = rm.get(i);
-            ans.remove(j);
-        }
-        return ans;
-
+        return true;
     }
+*/
+
+/*
+    public boolean wordBreak(String s, List<String> wordDict) {
+        wordDict.sort((String a, String b)->b.length()-a.length() );
+        boolean[] visited = new boolean[s.length()+3];
+        Arrays.fill(visited,false);
+        return helper(s, wordDict, 0, s.length() - 1,visited);
+    }
+
+    private boolean helper(String s, List<String> wordDict, int beg, int end,boolean[] visited) {
+        if (beg > end) {
+            return true;
+        }
+        for (int i = 0; beg + i <= s.length(); i++) {
+            if (visited[beg + i]) {
+                continue;
+            }
+            String now = s.substring(beg, beg + i);
+            if (wordDict.contains(now)) {
+                visited[beg + i] = true;
+                if (helper(s, wordDict, beg + i, end,visited)) {
+                    return true;
+                }
+            }
+        }
+//        for (String now : wordDict) {
+//            if (  beg + now.length()<=s.length() &&s.substring(beg, beg + now.length()).equals(now)) {
+//                if (helper(s, wordDict, beg + now.length(), end)) {
+//                    return true;
+//                }
+//            }
+//        }
+        return false;
+    }
+*/
+
+
+
+    public ListNode detectCycle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = fast.next;
+            if (fast == slow) {
+                break;
+            }
+        }
+        slow = head;
+        while (fast != slow) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return fast;
+    }
+
+
 
     public static void main(String[] args) {
         Solution s = new Solution();
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("0");
-//        sb.append("1");
-//        sb.append("0");
-
-//        List<String> test = new ArrayList<>();
-//        test.add("ale");
-//        test.add("apple");
-//        test.add("monkey");
-//        test.add("plea");
-        int[] test = {1,2,2};
-        int[] test3 = {5,6,7,10};
-        String[] testfstring = {"tea", "tan", "ate", "nat", "bat"};
+        int[] test = {9, 3, 15, 20, 7};
+        String[] testfstring = {"lt", "code"};
         int[][] test2 = new int[][]{{1}};//        TreeNode test = s.stringToTreeNode("[]");
 //        int[][] test = {{1,2},{3,4}};
 
-        System.out.println(s.subsetsWithDup(test));
-//        System.out.println(s.isSubtree(s.stringToTreeNode("[1,null,1,null,1,null,1,2]"),s.stringToTreeNode("[1,null,1,null,1,2]")));
-//        System.out.println(s.isSubtree(s.stringToTreeNode("[1,1]"),s.stringToTreeNode("[1]")));
+        System.out.println(s.wordBreak("leetcode",Arrays.asList(testfstring)));
+
     }
 }
